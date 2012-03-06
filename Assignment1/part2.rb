@@ -15,7 +15,7 @@ def rps_game_winner(game)
   raise NoSuchStrategyError unless check_strategy(game[0][1])
   raise NoSuchStrategyError unless check_strategy(game[1][1])
   
-  if game[0][1].eql?(game[1][1].upcase)
+  if game[0][1].eql?(game[1][1])
     return game[0]
   elsif game[0][1].eql?(WIN[game[1][1]])
     return game[1]

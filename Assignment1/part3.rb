@@ -3,10 +3,7 @@ def combine_anagrams(words)
   words.each{
     |w|
     converted = w.downcase.chars.sort * ""
-      
-    print "Word: ", w, "\n"
-    print "Conv: ", converted, "\n"
-    
+        
     if all_words.has_key?(converted)
       all_words[converted].push(w)
     else
