@@ -2,19 +2,25 @@
 #  part a                                                                                #
 #----------------------------------------------------------------------------------------#
 class Numeric
-  @@CONVERSION_TABLE = { "rupee_dollar" => 1.019, "yen_dollar" => 1.013, "euro_dollar" => 0.292, "dollar_rupee" => 0.019, "dollar_yen" => 0.013, "dollar_euro" => 1.292 }
+  @@CONVERSION_TABLE = { "rupee_dollar" => 0.019, "yen_dollar" => 0.013, "euro_dollar" => 1.292, "dollar_rupee" => (1/0.019), "dollar_yen" => (1/0.013), "dollar_euro" => (1/1.292) }
   attr_accessor :currency_type
   
   def method_missing(id,*args)
     @currency_type = strip_extra(id)
-
+    
     return self
   end
   
   def in(new_currency_type)
-    key = "#{currency_type}_#{strip_extra(new_currency_type)}"
+    new_currency_type = strip_extra(new_currency_type)
+    val = self
+    
+    unless currency_type.match(/dollar/) || new_currency_type.match(/dollar/)
+      val = val * @@CONVERSION_TABLE["#{currency_type}_dollar"]
+      @currency_type = "dollar"
+    end
 
-    return self * @@CONVERSION_TABLE[key]
+    return val * @@CONVERSION_TABLE["#{currency_type}_#{new_currency_type}"]
   end
   
   def strip_extra(value)
@@ -28,7 +34,8 @@ end
 #print "d->y: #{1.dollar.in(:yens)}\n"
 #print "e->d: #{1.euro.in(:dollar)}\n"
 #print "d->e: #{1.dollar.in(:euros)}\n"
-
+#print "#{2.rupees.in(:dollars)}\n"
+#print "#{5.rupees.in(:yen)}\n"
 
 
 #----------------------------------------------------------------------------------------#
@@ -64,5 +71,5 @@ module Enumerable
   end
 end
 
-print "#{[0, 1, 2, 3].palindrome?}\n"
-print "#{[0, 1, 2, [3, 5, 3], 2, 1, 0].palindrome?}\n"
+#print "#{[0, 1, 2, 3].palindrome?}\n"
+#print "#{[0, 1, 2, [3, 5, 3], 2, 1, 0].palindrome?}\n"
